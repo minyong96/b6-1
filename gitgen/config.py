@@ -11,7 +11,7 @@ BASE_URL_ENV = "AI_API_BASE_URL"
 DEFAULT_PROVIDER = "anthropic"
 DEFAULT_MODELS = {
     # 커밋/PR 요약은 비교적 단순한 작업이라 저비용 모델을 기본으로 둔다.
-    "anthropic": "claude-haiku-4-5",
+    "anthropic": "claude-haiku-4",
     "openai": "gpt-4o-mini",
 }
 DEFAULT_TEMPERATURE = 0.3
