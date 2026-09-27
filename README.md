@@ -24,6 +24,11 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+가상환경 내부 pip 로 설치 
+```bash
+./.venv/bin/pip install -r requirements.txt
+```
+
 ## 2. 환경변수(API Key) 설정
 
 API Key는 **환경변수로만** 읽습니다. 코드나 저장소에 키를 넣지 마세요.
