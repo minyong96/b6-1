@@ -85,6 +85,7 @@ ORDER BY fc.start_at, m.name;
               1 | 김민준      | 모닝 하타 요가       | 2026-09-20 07:00:00 | ATTENDED
               2 | 이서연      | 모닝 하타 요가       | 2026-09-20 07:00:00 | ATTENDED
               3 | 박지훈      | 매트 필라테스 기초   | 2026-09-28 10:00:00 | ATTENDED
+              4 | 최유나      | 매트 필라테스 기초   | 2026-09-28 10:00:00 | CANCELED
               7 | 강시우      | 크로스핏 WOD         | 2026-10-01 19:00:00 | NO_SHOW
               5 | 김민준      | 크로스핏 WOD         | 2026-10-01 19:00:00 | ATTENDED
               8 | 윤지아      | 크로스핏 WOD         | 2026-10-01 19:00:00 | ATTENDED
@@ -92,6 +93,7 @@ ORDER BY fc.start_at, m.name;
               9 | 김하은      | 스피닝 인터벌        | 2026-10-05 20:00:00 | ATTENDED
              10 | 임준서      | 스피닝 인터벌        | 2026-10-05 20:00:00 | ATTENDED
              11 | 최유나      | 웨이트 트레이닝 입문 | 2026-10-08 18:00:00 | ATTENDED
+             12 | 한소율      | 웨이트 트레이닝 입문 | 2026-10-08 18:00:00 | CANCELED
              15 | 김하은      | 기구 필라테스 리포머 | 2026-10-12 11:00:00 | ATTENDED
              16 | 윤지아      | 기구 필라테스 리포머 | 2026-10-12 11:00:00 | ATTENDED
              13 | 이서연      | 기구 필라테스 리포머 | 2026-10-12 11:00:00 | ATTENDED
@@ -103,12 +105,14 @@ ORDER BY fc.start_at, m.name;
              21 | 김민준      | 파워 요가            | 2026-10-20 19:00:00 | ATTENDED
              22 | 이서연      | 파워 요가            | 2026-10-20 19:00:00 | ATTENDED
              24 | 윤지아      | 크로스핏 바벨 기술   | 2026-10-22 19:00:00 | ATTENDED
-             23 | 정도윤      | 크로스핏 바벨 기술   | 2026-10-22 19:00:00 | NO_SHOW
-             25 | 임준서      | 코어 필라테스        | 2026-10-24 10:00:00 | NO_SHOW
+             23 | 정도윤      | 크로스핏 바벨 기술   | 2026-10-22 19:00:00 | RESERVED
+             26 | 김하은      | 코어 필라테스        | 2026-10-24 10:00:00 | CANCELED
+             25 | 임준서      | 코어 필라테스        | 2026-10-24 10:00:00 | RESERVED
              27 | 최유나      | 하체 집중 웨이트     | 2026-10-28 18:00:00 | RESERVED
              28 | 김민준      | 스피닝 라이드        | 2026-10-30 20:00:00 | RESERVED
              29 | 박지훈      | 복싱 기초 스파링     | 2026-11-02 19:30:00 | RESERVED
-(26 rows)
+             30 | 윤지아      | 리포머 중급          | 2026-11-05 11:00:00 | CANCELED
+(30 rows)
 
 SELECT t.id, t.name, t.specialty, COUNT(fc.id) AS class_count
 FROM trainer t
@@ -147,24 +151,28 @@ ORDER BY m.id, fc.start_at;
   3 | 박지훈 | 매트 필라테스 기초   | ATTENDED
   3 | 박지훈 | 복싱 다이어트        | ATTENDED
   3 | 박지훈 | 복싱 기초 스파링     | RESERVED
+  4 | 최유나 | 매트 필라테스 기초   | CANCELED
   4 | 최유나 | 웨이트 트레이닝 입문 | ATTENDED
   4 | 최유나 | 기구 필라테스 리포머 | ATTENDED
   4 | 최유나 | 하체 집중 웨이트     | RESERVED
   5 | 정도윤 | 크로스핏 WOD         | ATTENDED
-  5 | 정도윤 | 크로스핏 바벨 기술   | NO_SHOW
+  5 | 정도윤 | 크로스핏 바벨 기술   | RESERVED
   6 | 김하은 | 스피닝 인터벌        | ATTENDED
   6 | 김하은 | 기구 필라테스 리포머 | ATTENDED
+  6 | 김하은 | 코어 필라테스        | CANCELED
   7 | 강시우 | 크로스핏 WOD         | NO_SHOW
   7 | 강시우 | 복싱 다이어트        | ATTENDED
   8 | 윤지아 | 크로스핏 WOD         | ATTENDED
   8 | 윤지아 | 기구 필라테스 리포머 | ATTENDED
   8 | 윤지아 | 크로스핏 바벨 기술   | ATTENDED
+  8 | 윤지아 | 리포머 중급          | CANCELED
   9 | 임준서 | 스피닝 인터벌        | ATTENDED
-  9 | 임준서 | 코어 필라테스        | NO_SHOW
+  9 | 임준서 | 코어 필라테스        | RESERVED
+ 10 | 한소율 | 웨이트 트레이닝 입문 | CANCELED
  10 | 한소율 | 빈야사 플로우 요가   | NO_SHOW
  11 | 오태양 |                      | 
  12 | 김나래 |                      | 
-(28 rows)
+(32 rows)
 
 SELECT m.id, m.name, COUNT(*) AS reservation_count
 FROM member m
@@ -174,15 +182,15 @@ ORDER BY reservation_count DESC, m.id;
  id |  name  | reservation_count 
 ----+--------+-------------------
   1 | 김민준 |                 5
+  4 | 최유나 |                 4
+  8 | 윤지아 |                 4
   2 | 이서연 |                 3
   3 | 박지훈 |                 3
-  4 | 최유나 |                 3
-  8 | 윤지아 |                 3
+  6 | 김하은 |                 3
   5 | 정도윤 |                 2
-  6 | 김하은 |                 2
   7 | 강시우 |                 2
   9 | 임준서 |                 2
- 10 | 한소율 |                 1
+ 10 | 한소율 |                 2
 (10 rows)
 
 SELECT t.id, t.name, COUNT(*) AS attended_count, SUM(fc.price) AS total_revenue
@@ -217,8 +225,8 @@ ORDER BY avg_rating DESC;
 ----------+--------------+------------
  웨이트   |            1 |       5.00
  크로스핏 |            4 |       4.50
- 요가     |            5 |       4.40
  필라테스 |            5 |       4.40
+ 요가     |            5 |       4.40
 (4 rows)
 
 SELECT m.id, m.name, m.email, m.joined_at
@@ -240,9 +248,11 @@ FROM reservation r
 INNER JOIN fitness_class fc ON fc.id = r.class_id
 WHERE r.status = 'RESERVED'
   AND fc.start_at < CURRENT_TIMESTAMP;
- id | member_id | class_id | start_at | status 
-----+-----------+----------+----------+--------
-(0 rows)
+ id | member_id | class_id |      start_at       |  status  
+----+-----------+----------+---------------------+----------
+ 23 |         5 |       10 | 2026-10-22 19:00:00 | RESERVED
+ 25 |         9 |       11 | 2026-10-24 10:00:00 | RESERVED
+(2 rows)
 
 UPDATE reservation
 SET status = 'NO_SHOW'
@@ -252,7 +262,7 @@ WHERE status = 'RESERVED'
       FROM fitness_class
       WHERE start_at < CURRENT_TIMESTAMP
   );
-UPDATE 0
+UPDATE 2
 SELECT status, COUNT(*) AS cnt
 FROM reservation
 GROUP BY status
@@ -260,13 +270,14 @@ ORDER BY status;
   status  | cnt 
 ----------+-----
  ATTENDED |  19
+ CANCELED |   4
  NO_SHOW  |   4
  RESERVED |   3
-(3 rows)
+(4 rows)
 
 DELETE FROM reservation
 WHERE status = 'CANCELED';
-DELETE 0
+DELETE 4
 SELECT COUNT(*) AS total_count,
        SUM(CASE WHEN status = 'CANCELED' THEN 1 ELSE 0 END) AS canceled_count
 FROM reservation;
@@ -277,13 +288,14 @@ FROM reservation;
 
 EXPLAIN
 SELECT * FROM reservation WHERE class_id = 6;
-                         QUERY PLAN                         
-------------------------------------------------------------
- Seq Scan on reservation  (cost=0.00..1.32 rows=1 width=62)
+                         QUERY PLAN                          
+-------------------------------------------------------------
+ Seq Scan on reservation  (cost=0.00..21.25 rows=4 width=62)
    Filter: (class_id = 6)
 (2 rows)
 
 CREATE INDEX idx_reservation_class_id ON reservation (class_id);
+CREATE INDEX
 EXPLAIN
 SELECT * FROM reservation WHERE class_id = 6;
                          QUERY PLAN                         
@@ -292,4 +304,3 @@ SELECT * FROM reservation WHERE class_id = 6;
    Filter: (class_id = 6)
 (2 rows)
 
-ERROR:  relation "idx_reservation_class_id" already exists

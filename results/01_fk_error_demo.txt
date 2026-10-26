@@ -1,33 +1,25 @@
-
-=== 1. FK 위반: 존재하지 않는 회원(999)으로 예약 INSERT ==> 에러 예상
-INSERT INTO reservation (member_id, class_id) VALUES (999, 1);
 ERROR:  insert or update on table "reservation" violates foreign key constraint "fk_reservation_member"
 DETAIL:  Key (member_id)=(999) is not present in table "member".
 
-ERROR:  insert or update on table "reservation" violates foreign key constraint "fk_reservation_class"
-DETAIL:  Key (class_id)=(999) is not present in table "fitness_class".
+=== 1. FK 위반: 존재하지 않는 회원(999)으로 예약 INSERT ==> 에러 예상
+INSERT INTO reservation (member_id, class_id) VALUES (999, 1);
+
 === 2. FK 위반: 존재하지 않는 수업(999)으로 예약 INSERT ==> 에러 예상
 INSERT INTO reservation (member_id, class_id) VALUES (1, 999);
 
 === 3. FK 위반: 존재하지 않는 트레이너(999)로 수업 INSERT ==> 에러 예상
 INSERT INTO fitness_class (trainer_id, title, category, price, capacity, start_at)
 VALUES (999, '유령 트레이너 수업', '요가', 10000, 10, '2026-12-01 10:00:00');
-ERROR:  insert or update on table "fitness_class" violates foreign key constraint "fk_fitness_class_trainer"
-DETAIL:  Key (trainer_id)=(999) is not present in table "trainer".
 
 === 4. FK 위반: 예약이 있는 회원(1)을 DELETE ==> 에러 예상 (부모 삭제 차단)
 DELETE FROM member WHERE id = 1;
 
 === 5. FK 위반: 수업이 있는 트레이너(1)를 DELETE ==> 에러 예상
 DELETE FROM trainer WHERE id = 1;
-ERROR:  update or delete on table "member" violates foreign key constraint "fk_reservation_member" on table "reservation"
-DETAIL:  Key (id)=(1) is still referenced from table "reservation".
 
 === 6. 해결: 존재하는 값으로 INSERT ==> 성공 (11번 회원은 예약이 없음, 마지막에 ROLLBACK)
 BEGIN;
 BEGIN
-ERROR:  update or delete on table "trainer" violates foreign key constraint "fk_fitness_class_trainer" on table "fitness_class"
-DETAIL:  Key (id)=(1) is still referenced from table "fitness_class".
 INSERT INTO reservation (member_id, class_id) VALUES (11, 12);
 INSERT 0 1
 SELECT id, member_id, class_id, status FROM reservation WHERE member_id = 11;
@@ -56,24 +48,32 @@ ROLLBACK
 === 참고 A. UNIQUE 위반: 이미 있는 이메일로 회원 INSERT ==> 에러 예상
 INSERT INTO member (name, email, joined_at)
 VALUES ('중복이메일', 'minjun.kim@example.com', '2026-10-26');
-ERROR:  duplicate key value violates unique constraint "uq_member_email"
-DETAIL:  Key (email)=(minjun.kim@example.com) already exists.
 
 === 참고 B. UNIQUE 위반: 같은 회원이 같은 수업을 중복 예약 ==> 에러 예상
 INSERT INTO reservation (member_id, class_id) VALUES (1, 1);
-ERROR:  duplicate key value violates unique constraint "uq_reservation_member_class"
-DETAIL:  Key (member_id, class_id)=(1, 1) already exists.
 
 === 참고 C. CHECK 위반: 출석하지 않은 예약에 평점 입력 ==> 에러 예상
 INSERT INTO reservation (member_id, class_id, status, rating)
 VALUES (11, 12, 'RESERVED', 5);
+ERROR:  insert or update on table "reservation" violates foreign key constraint "fk_reservation_class"
+DETAIL:  Key (class_id)=(999) is not present in table "fitness_class".
+ERROR:  insert or update on table "fitness_class" violates foreign key constraint "fk_fitness_class_trainer"
+DETAIL:  Key (trainer_id)=(999) is not present in table "trainer".
+ERROR:  update or delete on table "member" violates foreign key constraint "fk_reservation_member" on table "reservation"
+DETAIL:  Key (id)=(1) is still referenced from table "reservation".
+ERROR:  update or delete on table "trainer" violates foreign key constraint "fk_fitness_class_trainer" on table "fitness_class"
+DETAIL:  Key (id)=(1) is still referenced from table "fitness_class".
+ERROR:  duplicate key value violates unique constraint "uq_member_email"
+DETAIL:  Key (email)=(minjun.kim@example.com) already exists.
+ERROR:  duplicate key value violates unique constraint "uq_reservation_member_class"
+DETAIL:  Key (member_id, class_id)=(1, 1) already exists.
+ERROR:  new row for relation "reservation" violates check constraint "ck_reservation_rating"
+DETAIL:  Failing row contains (35, 11, 12, RESERVED, 5, 2026-10-27 00:43:28.850284).
 
 === 시연 후 확인: 데이터는 그대로 (회원 12, 트레이너 10, 수업 15) ===
 SELECT (SELECT COUNT(*) FROM member)        AS members,
        (SELECT COUNT(*) FROM trainer)       AS trainers,
        (SELECT COUNT(*) FROM fitness_class) AS classes;
-ERROR:  new row for relation "reservation" violates check constraint "ck_reservation_rating"
-DETAIL:  Failing row contains (35, 11, 12, RESERVED, 5, 2026-10-27 00:22:46.938115).
  members | trainers | classes 
 ---------+----------+---------
       12 |       10 |      15
