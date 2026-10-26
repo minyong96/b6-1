@@ -1,0 +1,68 @@
+                                      Table "public.member"
+      Column      |          Type          | Collation | Nullable |           Default            
+------------------+------------------------+-----------+----------+------------------------------
+ id               | integer                |           | not null | generated always as identity
+ name             | character varying(50)  |           | not null | 
+ email            | character varying(100) |           | not null | 
+ phone            | character varying(20)  |           |          | 
+ membership_level | character varying(10)  |           | not null | 'BASIC'::character varying
+ joined_at        | date                   |           | not null | 
+Indexes:
+    "pk_member" PRIMARY KEY, btree (id)
+    "uq_member_email" UNIQUE CONSTRAINT, btree (email)
+Check constraints:
+    "ck_member_level" CHECK (membership_level::text = ANY (ARRAY['BASIC'::character varying, 'PREMIUM'::character varying, 'VIP'::character varying]::text[]))
+Referenced by:
+    TABLE "reservation" CONSTRAINT "fk_reservation_member" FOREIGN KEY (member_id) REFERENCES member(id)
+
+                                 Table "public.trainer"
+  Column   |         Type          | Collation | Nullable |           Default            
+-----------+-----------------------+-----------+----------+------------------------------
+ id        | integer               |           | not null | generated always as identity
+ name      | character varying(50) |           | not null | 
+ specialty | character varying(30) |           | not null | 
+ hired_at  | date                  |           | not null | 
+Indexes:
+    "pk_trainer" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "fitness_class" CONSTRAINT "fk_fitness_class_trainer" FOREIGN KEY (trainer_id) REFERENCES trainer(id)
+
+                                  Table "public.fitness_class"
+   Column   |            Type             | Collation | Nullable |           Default            
+------------+-----------------------------+-----------+----------+------------------------------
+ id         | integer                     |           | not null | generated always as identity
+ trainer_id | integer                     |           | not null | 
+ title      | character varying(100)      |           | not null | 
+ category   | character varying(30)       |           | not null | 
+ price      | integer                     |           | not null | 
+ capacity   | integer                     |           | not null | 
+ start_at   | timestamp without time zone |           | not null | 
+Indexes:
+    "pk_fitness_class" PRIMARY KEY, btree (id)
+Check constraints:
+    "ck_fitness_class_capacity" CHECK (capacity > 0)
+    "ck_fitness_class_price" CHECK (price >= 0)
+Foreign-key constraints:
+    "fk_fitness_class_trainer" FOREIGN KEY (trainer_id) REFERENCES trainer(id)
+Referenced by:
+    TABLE "reservation" CONSTRAINT "fk_reservation_class" FOREIGN KEY (class_id) REFERENCES fitness_class(id)
+
+                                    Table "public.reservation"
+   Column    |            Type             | Collation | Nullable |            Default            
+-------------+-----------------------------+-----------+----------+-------------------------------
+ id          | integer                     |           | not null | generated always as identity
+ member_id   | integer                     |           | not null | 
+ class_id    | integer                     |           | not null | 
+ status      | character varying(10)       |           | not null | 'RESERVED'::character varying
+ rating      | integer                     |           |          | 
+ reserved_at | timestamp without time zone |           | not null | CURRENT_TIMESTAMP
+Indexes:
+    "pk_reservation" PRIMARY KEY, btree (id)
+    "uq_reservation_member_class" UNIQUE CONSTRAINT, btree (member_id, class_id)
+Check constraints:
+    "ck_reservation_rating" CHECK (rating IS NULL OR rating >= 1 AND rating <= 5 AND status::text = 'ATTENDED'::text)
+    "ck_reservation_status" CHECK (status::text = ANY (ARRAY['RESERVED'::character varying, 'ATTENDED'::character varying, 'CANCELED'::character varying, 'NO_SHOW'::character varying]::text[]))
+Foreign-key constraints:
+    "fk_reservation_class" FOREIGN KEY (class_id) REFERENCES fitness_class(id)
+    "fk_reservation_member" FOREIGN KEY (member_id) REFERENCES member(id)
+

@@ -1,0 +1,8 @@
+      tbl      | count 
+---------------+-------
+ member        |    12
+ trainer       |    10
+ fitness_class |    15
+ reservation   |    30
+(4 rows)
+
