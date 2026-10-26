@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="420" viewBox="0 0 1320 420" font-family="Helvetica, Arial, sans-serif">
+  <rect width="1320" height="420" fill="#ffffff"/>
+  <text x="40" y="34" font-size="20" font-weight="bold" fill="#111">Fitness Class Reservation DB — ERD (PostgreSQL)</text>
+
+  <!-- relationship lines (drawn first, under the boxes) -->
+  <g stroke="#555" stroke-width="2" fill="none">
+    <path d="M290 105 L325 105 L325 131 L360 131"/>
+    <path d="M610 105 L645 105 L645 157 L680 157"/>
+    <path d="M1000 105 L965 105 L965 131 L930 131"/>
+  </g>
+  <g font-size="14" font-weight="bold" fill="#c0392b">
+    <text x="296" y="98">1</text><text x="338" y="124">N</text>
+    <text x="616" y="98">1</text><text x="658" y="150">N</text>
+    <text x="978" y="98">1</text><text x="938" y="124">N</text>
+  </g>
+
+  <!-- trainer -->
+  <g>
+    <rect x="40" y="60" width="250" height="136" fill="#fff" stroke="#2c3e50" stroke-width="2" rx="6"/>
+    <path d="M40 92 V66 a6 6 0 0 1 6 -6 H284 a6 6 0 0 1 6 6 V92 Z" fill="#2c3e50"/>
+    <text x="165" y="82" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">trainer</text>
+    <g font-size="13" fill="#222">
+      <text x="52" y="110">PK</text><text x="86" y="110">id</text><text x="278" y="110" text-anchor="end" fill="#666">integer</text>
+      <text x="86" y="136">name</text><text x="278" y="136" text-anchor="end" fill="#666">varchar(50) NN</text>
+      <text x="86" y="162">specialty</text><text x="278" y="162" text-anchor="end" fill="#666">varchar(30) NN</text>
+      <text x="86" y="188">hired_at</text><text x="278" y="188" text-anchor="end" fill="#666">date NN</text>
+    </g>
+  </g>
+
+  <!-- fitness_class -->
+  <g>
+    <rect x="360" y="60" width="250" height="214" fill="#fff" stroke="#2c3e50" stroke-width="2" rx="6"/>
+    <path d="M360 92 V66 a6 6 0 0 1 6 -6 H604 a6 6 0 0 1 6 6 V92 Z" fill="#2c3e50"/>
+    <text x="485" y="82" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">fitness_class</text>
+    <g font-size="13" fill="#222">
+      <text x="372" y="110">PK</text><text x="406" y="110">id</text><text x="598" y="110" text-anchor="end" fill="#666">integer</text>
+      <text x="372" y="136" fill="#c0392b">FK</text><text x="406" y="136">trainer_id</text><text x="598" y="136" text-anchor="end" fill="#666">integer NN</text>
+      <text x="406" y="162">title</text><text x="598" y="162" text-anchor="end" fill="#666">varchar(100) NN</text>
+      <text x="406" y="188">category</text><text x="598" y="188" text-anchor="end" fill="#666">varchar(30) NN</text>
+      <text x="406" y="214">price</text><text x="598" y="214" text-anchor="end" fill="#666">integer NN, &gt;= 0</text>
+      <text x="406" y="240">capacity</text><text x="598" y="240" text-anchor="end" fill="#666">integer NN, &gt; 0</text>
+      <text x="406" y="266">start_at</text><text x="598" y="266" text-anchor="end" fill="#666">timestamp NN</text>
+    </g>
+  </g>
+
+  <!-- reservation -->
+  <g>
+    <rect x="680" y="60" width="250" height="214" fill="#fff" stroke="#2c3e50" stroke-width="2" rx="6"/>
+    <path d="M680 92 V66 a6 6 0 0 1 6 -6 H924 a6 6 0 0 1 6 6 V92 Z" fill="#2c3e50"/>
+    <text x="805" y="82" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">reservation</text>
+    <g font-size="13" fill="#222">
+      <text x="692" y="110">PK</text><text x="726" y="110">id</text><text x="918" y="110" text-anchor="end" fill="#666">integer</text>
+      <text x="692" y="136" fill="#c0392b">FK</text><text x="726" y="136">member_id</text><text x="918" y="136" text-anchor="end" fill="#666">integer NN</text>
+      <text x="692" y="162" fill="#c0392b">FK</text><text x="726" y="162">class_id</text><text x="918" y="162" text-anchor="end" fill="#666">integer NN</text>
+      <text x="726" y="188">status</text><text x="918" y="188" text-anchor="end" fill="#666">varchar(10) NN</text>
+      <text x="726" y="214">rating</text><text x="918" y="214" text-anchor="end" fill="#666">integer, 1~5</text>
+      <text x="726" y="240">reserved_at</text><text x="918" y="240" text-anchor="end" fill="#666">timestamp NN</text>
+      <text x="692" y="266" font-size="12" fill="#2980b9">UQ (member_id, class_id)</text>
+    </g>
+  </g>
+
+  <!-- member -->
+  <g>
+    <rect x="1000" y="60" width="290" height="188" fill="#fff" stroke="#2c3e50" stroke-width="2" rx="6"/>
+    <path d="M1000 92 V66 a6 6 0 0 1 6 -6 H1284 a6 6 0 0 1 6 6 V92 Z" fill="#2c3e50"/>
+    <text x="1145" y="82" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">member</text>
+    <g font-size="13" fill="#222">
+      <text x="1012" y="110">PK</text><text x="1046" y="110">id</text><text x="1278" y="110" text-anchor="end" fill="#666">integer</text>
+      <text x="1046" y="136">name</text><text x="1278" y="136" text-anchor="end" fill="#666">varchar(50) NN</text>
+      <text x="1012" y="162" fill="#2980b9">UQ</text><text x="1046" y="162">email</text><text x="1278" y="162" text-anchor="end" fill="#666">varchar(100) NN</text>
+      <text x="1046" y="188">phone</text><text x="1278" y="188" text-anchor="end" fill="#666">varchar(20)</text>
+      <text x="1046" y="214">membership_level</text><text x="1278" y="214" text-anchor="end" fill="#666">varchar(10) NN</text>
+      <text x="1046" y="240">joined_at</text><text x="1278" y="240" text-anchor="end" fill="#666">date NN</text>
+    </g>
+  </g>
+
+  <!-- legend -->
+  <g font-size="13" fill="#333">
+    <text x="40" y="330" font-weight="bold">관계 (1:N)</text>
+    <text x="40" y="354">trainer 1 ── N fitness_class   (fitness_class.trainer_id → trainer.id)</text>
+    <text x="40" y="376">fitness_class 1 ── N reservation   (reservation.class_id → fitness_class.id)</text>
+    <text x="40" y="398">member 1 ── N reservation   (reservation.member_id → member.id)</text>
+    <text x="760" y="330" font-weight="bold">표기</text>
+    <text x="760" y="354">PK 기본키 · FK 외래키 · UQ 유니크 · NN NOT NULL</text>
+    <text x="760" y="376">member ↔ fitness_class 는 reservation 을 통한 N:M 관계</text>
+  </g>
+</svg>

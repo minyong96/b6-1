@@ -1,0 +1,48 @@
+// dbdiagram.io 에 붙여넣으면 ERD가 그려진다 (https://dbdiagram.io)
+Project fitness_db {
+  database_type: 'PostgreSQL'
+}
+
+Table member {
+  id integer [pk, increment]
+  name varchar(50) [not null]
+  email varchar(100) [not null, unique]
+  phone varchar(20)
+  membership_level varchar(10) [not null, default: 'BASIC', note: "BASIC | PREMIUM | VIP"]
+  joined_at date [not null]
+}
+
+Table trainer {
+  id integer [pk, increment]
+  name varchar(50) [not null]
+  specialty varchar(30) [not null]
+  hired_at date [not null]
+}
+
+Table fitness_class {
+  id integer [pk, increment]
+  trainer_id integer [not null]
+  title varchar(100) [not null]
+  category varchar(30) [not null]
+  price integer [not null, note: "price >= 0"]
+  capacity integer [not null, note: "capacity > 0"]
+  start_at timestamp [not null]
+}
+
+Table reservation {
+  id integer [pk, increment]
+  member_id integer [not null]
+  class_id integer [not null]
+  status varchar(10) [not null, default: 'RESERVED', note: "RESERVED | ATTENDED | CANCELED | NO_SHOW"]
+  rating integer [note: "1~5, ATTENDED 일 때만"]
+  reserved_at timestamp [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (member_id, class_id) [unique]
+    class_id
+  }
+}
+
+Ref: fitness_class.trainer_id > trainer.id
+Ref: reservation.member_id > member.id
+Ref: reservation.class_id > fitness_class.id
