@@ -96,10 +96,4 @@ docker compose down -v && docker compose up -d
 - 데이터가 30행 수준이라 Q15의 인덱스를 만든 뒤에도 `EXPLAIN`은 Seq Scan으로 나올 수 있습니다. (옵티마이저가 전체 스캔이 더 싸다고 판단한 정상 동작)
 - View, Procedure, Trigger는 사용하지 않았습니다.
 
-## 문서
-| 문서 | 내용 |
-|---|---|
-| [PLAN.md](PLAN.md) | 주제, 스키마, 쿼리, 작업 단계 계획 |
-| [RUN_GUIDE.md](RUN_GUIDE.md) | 실행 결과를 만드는 단계별 가이드와 기대 결과 |
-| [defense.md](defense.md) | 과제의 핵심, 깨달아야 할 것, 예상 질문 |
-| [deep-dive.md](deep-dive.md) | 정규화, 인덱스, 트랜잭션 등 심화 이론 |
+
