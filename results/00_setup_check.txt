@@ -3,6 +3,6 @@
  member        |    12
  trainer       |    10
  fitness_class |    15
- reservation   |    30
+ reservation   |    26
 (4 rows)
 

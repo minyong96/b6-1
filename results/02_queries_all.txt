@@ -284,7 +284,6 @@ SELECT * FROM reservation WHERE class_id = 6;
 (2 rows)
 
 CREATE INDEX idx_reservation_class_id ON reservation (class_id);
-ERROR:  relation "idx_reservation_class_id" already exists
 EXPLAIN
 SELECT * FROM reservation WHERE class_id = 6;
                          QUERY PLAN                         
@@ -293,3 +292,4 @@ SELECT * FROM reservation WHERE class_id = 6;
    Filter: (class_id = 6)
 (2 rows)
 
+ERROR:  relation "idx_reservation_class_id" already exists
